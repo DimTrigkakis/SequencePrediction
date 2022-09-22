@@ -2,9 +2,36 @@
     <head>
         <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
         <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
-        <title>My First Page</title>
+        <style>
+            h1{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            }
+            div{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 100px;
+            }
+            button{
+            background-color: Black;
+            color: white;
+            border-radius: 5px;
+            }
+        </style>
     </head>
     <body>
-        <py-script> print ('Hello World') </py-script>
+        <h1>PyScript Events</h1>
+        <div>
+        <input id="Sequence"> Press me ! </input>
+        </div>
+        <py-script>
+        import pyodide
+        def on_click(e):
+            e.target.innerHTML = "Tada !!! you pressed me !."
+        sequence_field = document.getElementById('Sequence')
+        sequence_field.addEventListener('click', pyodide.create_proxy(on_click))
+        </py-script>
     </body>
 </html>
