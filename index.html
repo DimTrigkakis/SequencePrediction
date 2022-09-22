@@ -22,6 +22,9 @@
         </style>
     </head>
     <body>
+      <py-env>
+      - sympy
+      </py-env>
         <h1>PyScript Events</h1>
         <div>
         <input id="Sequence"> Sequence </input>
@@ -33,12 +36,64 @@
         <label id="result"> Next prediction is : </label>
         </div>
         <py-script>
+        from sympy import *
         import pyodide
         def on_click(e):
             label = document.getElementById('result')
             sequence = document.getElementById('Sequence').value
-            
-            label.innerHTML = f"Next prediction is : {sequence}"
+
+            x_symbol = Symbol('x')
+            y_symbol = Symbol('y')
+
+            input_line = [float(x) for x in sequence.split(",")]
+            one_line = [1 for i in range(len(input_line))]
+
+            pad_index = 1
+
+            line_1 = one_line
+            line_2 = list(input_line)
+            line_3= [0 for i in range(len(input_line))]
+
+            def redefine_line(line, pad_index):
+                redefined_line = [0 for i in range(len(line))]
+                for i in range(pad_index, len(line)-pad_index):
+                    redefined_line[i] = line[i] - line[i-1]*x_symbol
+                return redefined_line
+
+            line_2 = redefine_line(line_2, pad_index)
+
+            for j in range(10):
+                # redefine line_2
+                pad_index += 1
+
+                line_3 = [0 for i in range(len(line_2))]
+                for i in range(pad_index, len(line_2)-pad_index):
+                    y_equation = y_symbol - (line_2[i]**2 - line_2[i+1]*line_2[i-1])/line_1[i]
+                    line_3[i] = solve(y_equation, y_symbol)[0]
+
+
+                line_3_zeros = True 
+                for i in range(len(line_3)):
+                    if line_3[i] != 0:
+                        line_3_zeros = False
+                if line_3_zeros and (pad_index < (len(line_2)//2)):
+                    break
+
+                line_1 = list(line_2)
+                line_2 = list(line_3)
+
+            final_equation = line_2[len(line_2)//2]
+            coeffs = Poly(final_equation, x_symbol).coeffs()
+            coeffs = [-k for k in coeffs[1:]]
+
+            solution = 0
+            for i in range(len(coeffs)):
+                solution += coeffs[i]*input_line[len(input_line)-i-1]
+                                                       
+                                                       
+                                                       
+                                                       
+            label.innerHTML = f"Next prediction is : {solution}"
         sequence_field = document.getElementById('Sequence')
         button = document.getElementById('button')
         button.addEventListener('click', pyodide.create_proxy(on_click))
