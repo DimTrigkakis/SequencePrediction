@@ -24,14 +24,17 @@
     <body>
         <h1>PyScript Events</h1>
         <div>
-        <input id="Sequence"> Press me ! </input>
+        <input id="Sequence"> Sequence </input>
+        <button id="button"> Ok </button>
+        <label id="result"> Next prediction is : </label>
         </div>
         <py-script>
         import pyodide
         def on_click(e):
-            e.target.innerHTML = "Tada !!! you pressed me !."
+            e.target.innerHTML = "Next prediction is : 5"
         sequence_field = document.getElementById('Sequence')
-        sequence_field.addEventListener('click', pyodide.create_proxy(on_click))
+        button = document.getElementById('button')
+        button.addEventListener('click', pyodide.create_proxy(on_click))
         </py-script>
     </body>
 </html>
