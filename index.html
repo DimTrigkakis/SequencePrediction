@@ -35,9 +35,10 @@
         <py-script>
         import pyodide
         def on_click(e):
-            label = document.getElementById('label')
-            sequence = document.getElementById('Sequence')
-            label.innerHTML = "Next prediction is : 5"
+            label = document.getElementById('result')
+            sequence = document.getElementById('Sequence').value
+            
+            label.innerHTML = f"Next prediction is : {sequence}"
         sequence_field = document.getElementById('Sequence')
         button = document.getElementById('button')
         button.addEventListener('click', pyodide.create_proxy(on_click))
