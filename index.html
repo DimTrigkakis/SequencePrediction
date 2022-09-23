@@ -84,7 +84,7 @@
 
             final_equation = line_2[len(line_2)//2]
             coeffs = Poly(final_equation, x_symbol).coeffs()
-            coeffs = [-k for k in coeffs[1:]]
+            coeffs = [-k/coeffs[0] for k in coeffs[1:]]
 
             solution = 0
             for i in range(len(coeffs)):
